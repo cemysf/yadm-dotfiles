@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+# ~/.bash_functions
+
+
+# Variables
+FEEDBACK_COLOR='\033[0;36m'
+NO_COLOR='\033[0m'
+
+# # For going inside running docker containers
+# goinside(){
+#     docker exec -it $1 bash -c "stty cols $COLUMNS rows $LINES && bash";
+# }
+# _goinside(){
+#     COMPREPLY=( $(docker ps --format "{{.Names}}" -f name=$2) );
+# }
+# complete -F _goinside goinside;
+# export -f goinside;
+
+
+# Cronometer
+alias crono='stf=$(date +%s.%N);for ((;;));do ctf=$( date +%s.%N );echo -en "\r$(date -u -d "0 $ctf sec - $stf sec" "+%H:%M:%S.%N")";done'
+
+
+
+# A shortcut function that simplifies usage of xclip.
+# - Accepts input from either stdin (pipe), or params.
+# e.g. pipe:   tail -n 100 /var/log/apache2/error.log | cb
+# e.g. file:   cbf ~/.ssh/id_rsa.pub
+# e.g. params: cb This is some unquoted text.
+# ------------------------------------------------
+cb() {
+  local _scs_col="\e[0;32m"; local _wrn_col='\e[1;31m'; local _trn_col='\e[0;33m'
+  # Check that xclip is installed.
+  if ! type xclip > /dev/null 2>&1; then
+    echo -e "$_wrn_col""You must have the 'xclip' program installed.\e[0m"
+  # Check user is not root (root doesn't have access to user xorg server)
+  elif [[ "$USER" == "root" ]]; then
+    echo -e "$_wrn_col""Must be regular user (not root) to copy a file to the clipboard.\e[0m"
+  else
+    # If no tty, data should be available on stdin
+    if ! [[ "$( tty )" == /dev/* ]]; then
+      input="$(< /dev/stdin)"
+    # Else, fetch input from params
+    else
+      input="$*"
+    fi
+    if [ -z "$input" ]; then  # If no input, print usage message.
+      echo "Copies a string to the clipboard."
+      echo "Usage: cb <string>"
+      echo "       echo <string> | cb"
+    else
+      # Copy input to clipboard
+      echo -n "$input" | xclip -selection c
+      # Truncate text for status
+      if [ ${#input} -gt 80 ]; then input="$(echo $input | cut -c1-80)$_trn_col...\e[0m"; fi
+      # Print status.
+      echo -e "$_scs_col""Copied to clipboard:\e[0m $input"
+    fi
+  fi
+}
+# Aliases / functions leveraging the cb() function
+# ------------------------------------------------
+# Copy contents of a file
+function cbf() { cat "$1" | cb; }
+# Copy SSH public key
+alias cbssh="cbf ~/.ssh/id_rsa.pub"
+# Copy current working directory
+alias cbwd="pwd | cb"
+# Copy most recent command in bash history
+alias cbhs="cat $HISTFILE | tail -n 1 | cb"
+
+# Start a simple HTTP server on localhost:$port in the current working directory
+function server() {
+    local port="${1:-8000}"
+    printf '\033[0;36m%s\033[0m\n' "Starting a py3 HTTP server for ${port}";
+    python3 -m http.server "$port"
+}
+
+# run a file with one command per line using a pool of "P" workers
+#
+# It takes 1 mandatory argument:               pool /file/to/be/run.txt
+#      and optionally, the worker count:       pool /file/to/be/run.txt 5
+# TODO add a command and use a file of input args?
+function pool() {
+    local pcount="${2:-4}"
+    local logfile=$(mktemp --suffix=.log)
+    printf '\033[0;36m%s\033[0m\n' "Running the commands in ${1} with ${pcount} workers [LOGFILE AT ${logfile}]!";
+    cat "${1}" | xargs -P "${pcount}" -I % sh -c '%' 2>&1 | tee ${logfile};
+    printf '\033[0;36m%s\033[0m\n' "Finished running ${1} [LOGFILE AT ${logfile}]!";
+}
+
+# Create a python3 virtual environment with all of the standard reqs 
+function py3venv() {
+    local venvname="${1:-venv}"
+    local venvdir="${2:-.}"
+    
+    printf '\033[0;36m%s\033[0m\n' "Making a py3 venv at ${venvname}!";
+    (cd ${venvdir} \
+    && mkdir ${venvname} \
+    && python3 -m venv ${venvname}                                 \
+    && ${venvname}/bin/python -m pip install --upgrade pip         \
+    && ${venvname}/bin/python -m pip install --upgrade setuptools  \
+    && ${venvname}/bin/python -m pip install --upgrade wheel       \
+    && realpath ${venvdir} > $(find . -type d -name 'site-packages')/venv_parentdir.pth
+  )
+
+    printf '\033[0;36m%s\033[0m\n' "Done!";
+}
+
+# Prevent nested ranger instances
+ranger() {
+    if [ -z "$RANGER_LEVEL" ]; then
+        /usr/bin/ranger "$@"
+    else
+        exit
+    fi
+}
+
+# 
+function pyprofile() {
+    local scriptname="${1}"
+    local basename=""${scriptname%.py}""
+    
+    printf '\033[0;36m%s\033[0m\n' "Running the profiler...";
+    python -m cProfile -o ${basename}.stats ${scriptname}
+    gprof2dot ${basename}.stats -f pstats > ${basename}.dot
+
+    printf '\033[0;36m%s\033[0m\n' "Done!";
+}
+
+
+# function pdfmerge(){
+
+#     local input_dir="${1:-.}"
+#     local out_file="combined.pdf"
+
+#     printf '\033[0;36m%s\033[0m\n' "Making a PDF with ${input_dir}/*.pdf -> ${out_file}!";
+
+#     local tmp_dir=$(mktemp --directory --suffix=pdftk_unite)
+#     local bookmarks_file="$tmp_dir/bookmarks.txt"
+#     local bookmarks_fmt="BookmarkBegin
+# BookmarkTitle: %s
+# BookmarkLevel: 1
+# BookmarkPageNumber: 1
+# "
+
+#     mkdir -p "${tmp_dir}"
+
+#     for f in ${input_dir}/*.pdf; do
+#         echo "Bookmarking $f..."
+#         title="${f%.*}"
+#         printf "$bookmarks_fmt" "$title" > "$bookmarks_file"
+#         pdftk "$f" update_info "$bookmarks_file" output "$tmp_dir/$f"
+#     done
+
+#     pdftk "${tmp_dir}"/*.pdf cat output "$out_file"
+
+# }
+
+
+
