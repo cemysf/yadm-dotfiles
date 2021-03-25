@@ -1,0 +1,32 @@
+! ~/.config/regolith/Xresources
+
+! References:
+
+! To see what values can be changed, use: `xrdb -query`. For more info:
+! https://regolith-linux.org/docs/howto/override-xres/
+! Standard values here:
+! https://regolith-linux.org/docs/reference/xresources/
+
+! update with:
+! regolith-look refresh
+
+! keybindings:
+! https://regolith-linux.org/docs/reference/keybindings/
+
+i3-wm.bar.position: top
+
+i3-wm.bar.trayoutput:	primary
+
+! Choose compositor
+! (list all compositors with: `apt search regolith-compositor-` )
+
+! Default
+! regolith-compositor-picom-glx
+
+i3-wm.program.compositor:	none
+! regolith-compositor-none
+! sudo apt install regolith-compositor-none
+
+! regolith-compositor-compton-glx
+! regolith-compositor-xcompmgr
+
