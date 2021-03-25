@@ -1,0 +1,28 @@
+#!/usr/bin/env xdg-open
+
+# Global installation
+# /usr/share/applications/name.desktop
+# Local installation
+# ~/.local/share/applications/name.desktop
+
+# Specs should follow:
+# https://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
+
+# Icons in /usr/share/icons
+
+# https://gist.github.com/fmoralesc/bd46e97b39ee284af641
+
+# Icon=/home/felipe/images/misc/neovim-mark.png
+
+# Improve from github: https://github.com/fmoralesc/neovim-gnome-terminal-wrapper
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Neovim
+Exec=/usr/local/bin/nvim_desktop_wrapper.py %F
+NoDisplay=false
+Categories=X-GNOME-Other;
+StartupNotify=false
+Terminal=false
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
