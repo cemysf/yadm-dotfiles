@@ -1,0 +1,94 @@
+
+# Function decorator
+snippet fdec
+import inspect
+import functools
+def ${1:fcn_decorator}(fn):
+	argspec = inspect.getfullargspec(fn)
+	positional_count = len(argspec.args) - len(argspec.defaults)
+	defaults = dict(zip(argspec.args[positional_count:], argspec.defaults))
+	
+	@functools.wraps(fn)
+	def wrapper(*args, **kwargs):
+		used_kwargs = kwargs.copy()
+		used_kwargs.update(zip(argspec.args[positional_count:], args[positional_count:]))
+	
+		dict2print = {k: used_kwargs.get(k, d) for k, d in defaults.items()}
+		print(f'function {fn.__name__} '
+			f'called with positional args {args[:positional_count]} '
+			f'and keyword args {dict2print}',
+			)
+		return fn(*args, **kwargs)
+	return wrapper
+$0
+endsnippet
+
+# import inspect
+# import functools
+# def document_call(fn):
+#     argspec = inspect.getfullargspec(fn)
+#     positional_count = len(argspec.args) - len(argspec.defaults)
+#     defaults = dict(zip(argspec.args[positional_count:], argspec.defaults))
+
+#     @functools.wraps(fn)
+#     def wrapper(*args, **kwargs):
+#         used_kwargs = kwargs.copy()
+#         used_kwargs.update(zip(argspec.args[positional_count:], args[positional_count:]))
+
+#         dict2print = {k: used_kwargs.get(k, d) for k, d in defaults.items()}
+#         print(f'function {fn.__name__} '
+#               f'called with positional args {args[:positional_count]} '
+#               f'and keyword args {dict2print}',
+#               )
+#         return fn(*args, **kwargs)
+
+#     return wrapper
+
+
+# import tempfile
+# import subprocess
+# import typing as T
+# 
+# def safe_run(cmd:T.Sequence[str],
+#              env:T.Optional[T.Dict[str,str]]=None, 
+#              cwd:T.Optional[str]=None,
+#              )->T.Tuple[int,str]:
+#     with tempfile.NamedTemporaryFile(suffix='.txt') as fp:
+#         p = subprocess.run(cmd,
+#                            sdtout=fp,
+#                            stderr=subprocess.STDOUT,
+#                            cwd=cwd,
+#                            env=env,
+#                            )
+#         with open(fp.name, 'rb') as fp_out:
+#             output = fp_out.read().decode('utf8', 'ignore')
+#     
+#     return p.returncode,output
+
+
+
+# class with repr 
+#     def __repr__(self):
+#         return (
+#             "<"
+#             f"{self.__class__.__name__}, "
+#             f"loc=({hex(id(self))}), "
+#             f"thread_type_str={self.thread_type_str}, "
+#             f"thread_size_str={self.thread_size_str}]"
+#             ">"
+#         )
+# 
+# 
+
+# # Read the file
+# import codecs
+# import pathlib
+# import json
+# import typing as T
+
+
+# def read_json(path: T.Union[str, pathlib.Path]) -> T.Dict:
+#     with codecs.open(path, "r", encoding="utf-8", errors="ignore") as fp:
+#         return json.load(fp)
+
+

@@ -1,0 +1,34 @@
+{
+    // python config
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.mypyEnabled": false,
+    "python.formatting.provider": "black",
+    // Tslint on save
+    //"tslint.enable": true,
+    //"tslint.autoFixOnSave": true,
+    // Run formatters (prettier and others)
+    "coc.preferences.formatOnSaveFiletypes": [
+        "css",
+        "html",
+        "json",
+        "markdown",
+        "Markdown",
+        "javascript",
+        "javascriptreact",
+        "typescript",
+        "typescriptreact"
+    ],
+    // prettier config
+    // Require .prettierrc
+    "prettier.requireConfig": false,
+    "prettier.printWidth": 120,
+    "prettier.tabWidth": 4,
+    "prettier.singleQuote": true,
+    // snippets
+    "snippets.ultisnips.enable": true,
+    "snippets.ultisnips.directories": ["UltiSnips", "~/.config/nvim/utils/snips"],
+    "snippets.extends": {
+        "cpp": ["c"]
+    }
+}
