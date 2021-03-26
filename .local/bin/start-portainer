@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 container_name='portainer'
-url='http://localhost:9000/'
+port='9000'
+url="http://localhost:${port}/"
 
 if [ ! "$(docker ps -q -f name=${container_name})" ]; then
     if [ "$(docker ps -aq -f status=exited -f name=${container_name})" ]; then
@@ -16,7 +17,7 @@ if [ ! "$(docker ps -q -f name=${container_name})" ]; then
       --detach                                     \
       --rm                                         \
       -p 8000:8000                                 \
-      -p 9000:9000                                 \
+      -p 9000:${port}                              \
       --name=${container_name}                     \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v portainer_data:/data                      \
