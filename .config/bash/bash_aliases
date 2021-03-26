@@ -1,0 +1,103 @@
+#!/usr/bin/env bash
+# ~/.bash_aliases
+
+# Make aliases work with "sudo": https://askubuntu.com/questions/22037/aliases-not-available-when-using-sudo
+# We can tell bash to check the next word after the alias (i.e sudo) by adding a space to the end of the alias value.
+alias sudo='sudo '
+
+# Shell helpers
+# update & upgrade & autoremove
+alias uua='sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get autoremove -y'
+alias uvim='neovim +PackUpdate +qall ; neovim +CocInstall +qall';
+# audio restart (from Ubuntu podcast)
+alias restart-audio='systemctl --user restart pulseaudio'
+# bad way to restart
+# pulseaudio -k && sudo alsa force-reload
+
+# rerun last command as root
+alias please='sudo !!'
+
+# some more aliases
+alias ..='cd ..'
+alias cd..='cd ..'
+alias mode='(set -o | grep emacs.*on >/dev/null 2>&1 && echo "emacs mode" || echo "vi mode")'
+
+# ls shortcuts
+# alias l='ls -CF'
+# # alias l='ls -l'
+# alias ll='ls -AlF'
+# alias la='ls -A'
+# # alias la='ls -Al'
+# alias lss='ls -lAsh'
+
+# git
+# Ignore changes to already tracked files
+alias untrack='git update-index --assume-unchanged'
+alias retrack='git update-index --no-assume-unchanged'
+alias backup-untracked='git ls-files --others --exclude-standard -z | xargs -0 tar rvf ~/backup-untracked.zip'
+
+# Reload dusnt config file
+alias dunst-reload='killall dunst; notify-send "reloaded the dunstrc file!"'
+
+# Like rm, but safer since it uses trash-cli
+alias tp=trash-put
+alias rm=trash-put
+
+# Like cat, but nicer
+alias cat='batcat --style=plain'
+
+# Like ls, but nicer
+alias l='exa'
+alias la='exa -a'
+alias ll='exa -lah'
+alias ls='exa --color=auto'
+
+# Like tree, but nicer
+# tree with color
+# alias tree='tree -C'
+# alias trls='tree -C | less -R'	# -C outputs colour, -R makes less understand color
+# using exa as the tree
+alias tree='exa --tree'
+
+
+
+# Find big files/directories
+alias space-left=baobab
+
+# Copy with progress bar
+alias cpv='rsync -ah --info=progress2'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    # alias ls='ls --color=auto'
+    alias ls='exa --color=auto'
+    # alias dir='dir --color=auto'
+    # alias vdir='vdir --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# "pi ip" Find my pi's IP address
+alias piip='arp -na | grep -i b8:27:eb'
+
+# For the XPS13
+alias cctk=/opt/dell/dcc/cctk
+
+alias audio-laptop='pacmd set-card-profile 0 output:analog-stereo+input:analog-stereo'
+# https://unix.stackexchange.com/questions/62818/how-can-i-switch-between-different-audio-output-hardware-using-the-shell
+# alias audio-hdmi='pacmd set-card-profile 0 output:hdmi-stereo+input:analog-stereo'
+# xrandr --output <other screen> --same-as <main screen>
+
+# Docker
+# docker stop $(docker ps -a -q)
+# docker rm $(docker ps -a -q)
+
+# Shorthand for programs
+alias fd='fdfind'
+alias r='ranger'

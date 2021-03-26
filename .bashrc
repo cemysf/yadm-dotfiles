@@ -117,14 +117,14 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.config/bash/bash_aliases ]; then
+    . ~/.config/bash/bash_aliases
 fi
 
 # FUNCTION DEFINITIONS
 # --------------------------------------------------------------------------------
-if [ -f ~/.bash_functions ]; then
-    source ~/.bash_functions
+if [ -f ~/.config/bash/bash_functions ]; then
+    source ~/.config/bash/bash_functions
 fi
 
 # AUTOCOMPLETION
@@ -141,22 +141,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# # The autocompletion *.bash files are at ~/.local/share/bash-completion/completions/
-
-# # My LOCAL autocompletion files in ~/.bash_completion.d
-# # # mkdir -p ~/.bash_completion.d
-# # for bcfile in ~/.bash_completion.d/* ; do
-# #   [ -f "$bcfile" ] && . $bcfile
-# # done
-
-# if [[ -d ~/.bash_completion.d/ ]] && \
-#    ! find ~/.bash_completion.d/. ! -name . -prune -exec false {} +
-# then
-#     for f in ~/.bash_completion.d/*
-#     do
-#         source "$f"
-#     done
-# fi
+# My LOCAL autocompletion files
+for bcfile in ~/.config/bash/bash_completion/* ; do
+  [ -f "$bcfile" ] && . $bcfile
+done
 
 # AUTOCOMPLETION FOR ALIASES
 # --------------------------------------------------------------------------------
@@ -294,8 +282,6 @@ set -o emacs
 # complete list.
 
 bind -x '"\C-l": clear'
-
-# neofetch
 
 # for debugging nautilus...
 # G_DEBUG="all" NAUTILUS_DEBUG="All" nautilus
