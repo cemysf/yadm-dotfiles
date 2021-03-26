@@ -234,6 +234,9 @@ noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
 "" Opens a tab edit command with the path of the currently edited file filled
 noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
 
+" ------------------ "
+" Highlighting Utils "
+" ------------------ "
 "" Highlighting lines with <Leader> l & <Leader> c
 " https://vim.fandom.com/wiki/Highlight_current_line
 " highlight the current line
@@ -241,3 +244,23 @@ nnoremap <silent> <Leader>l :exe "let m = matchadd('WildMenu','\\%" . line('.') 
 " clear all the highlighted lines
 nnoremap <silent> <Leader>c :call clearmatches()<CR>
 
+" Highlight duplicate lines
+function! HighlightRepeats() range
+  let lineCounts = {}
+  let lineNum = a:firstline
+  while lineNum <= a:lastline
+    let lineText = getline(lineNum)
+    if lineText != ""
+      let lineCounts[lineText] = (has_key(lineCounts, lineText) ? lineCounts[lineText] : 0) + 1
+    endif
+    let lineNum = lineNum + 1
+  endwhile
+  exe 'syn clear Repeat'
+  for lineText in keys(lineCounts)
+    if lineCounts[lineText] >= 2
+      exe 'syn match Repeat "^' . escape(lineText, '".\^$*[]') . '$"'
+    endif
+  endfor
+endfunction
+
+command! -range=% HighlightRepeats <line1>,<line2>call HighlightRepeats()

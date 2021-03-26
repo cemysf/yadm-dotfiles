@@ -26,7 +26,8 @@ augroup rainbow_lisp
 augroup END
 
 " Use nicer symbols for tabstops and EOLs
- set listchars=tab:\ ,eol:⏎
+ " set listchars=tab:\ ,eol:⏎
+ set listchars=tab:⇥\ ,eol:⏎
 
 " -----------------------------------
 " Theme config
@@ -34,13 +35,9 @@ augroup END
 packadd! onedark.vim
 
 set cmdheight=2                         " More space for displaying messages
-
 set pumheight=10                        " Makes popup menu smaller
-
 set background=dark                     " tell vim what the background color looks like
-
 set number                              " Line numbers
-
 set cursorline                          " Enable highlighting of the current line
 set ruler              			            " Show the cursor position all the time
 
@@ -103,3 +100,6 @@ let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
 let g:lightline.colorscheme = "one"
+
+" Show all highlight groups:
+" :so $VIMRUNTIME/syntax/hitest.vim

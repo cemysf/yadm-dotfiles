@@ -158,4 +158,8 @@ function pyprofile() {
 # }
 
 
+kill_slack() {
+ for SLACK_PID in `ps aux | grep slack | awk '{print $2}'`; do kill $SLACK_PID; done
+}
+export -f kill_slack
 

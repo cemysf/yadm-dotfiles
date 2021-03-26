@@ -8,22 +8,31 @@ case $- in
       *) return;;
 esac
 
-# Normally, '**' = '*', but now '**' will act as a recursive '*' through all directory levels
-shopt -s globstar
-
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-# HISTCONTROL=ignoreboth
-export HISTCONTROL=erasedups	# when adding an item to history, delete itentical commands upstream
-
-# append to the history file, don't overwrite it
-shopt -s histappend
+# --------------------------------------------------------------------------------
+# HISTORY
+# --------------------------------------------------------------------------------
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 # HISTSIZE=1000
 export HISTSIZE=10000		# save 10000 items in history
 # HISTFILESIZE=2000
 export HISTFILESIZE=2000
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+# HISTCONTROL=ignoreboth
+export HISTCONTROL=erasedups	# when adding an item to history, delete itentical commands upstream
+
+
+# --------------------------------------------------------------------------------
+# SETTINGS
+# --------------------------------------------------------------------------------
+
+# Normally, '**' = '*', but now '**' will act as a recursive '*' through all directory levels
+shopt -s globstar
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -111,22 +120,25 @@ if [ -n "$RANGER_LEVEL" ]; then export PS1="[ranger]$PS1"; fi
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 
+# --------------------------------------------------------------------------------
 # ALIAS DEFINITIONS
 # --------------------------------------------------------------------------------
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f ~/.config/bash/bash_aliases ]; then
-    . ~/.config/bash/bash_aliases
+if [ -f ~/.config/shell/aliases ]; then
+    . ~/.config/shell/aliases
 fi
 
+# --------------------------------------------------------------------------------
 # FUNCTION DEFINITIONS
 # --------------------------------------------------------------------------------
 if [ -f ~/.config/bash/bash_functions ]; then
     source ~/.config/bash/bash_functions
 fi
 
+# --------------------------------------------------------------------------------
 # AUTOCOMPLETION
 # --------------------------------------------------------------------------------
 
