@@ -9,6 +9,10 @@ alias sudo='sudo '
 # update & upgrade & autoremove
 alias uua='sudo apt-get update -y && sudo apt-get upgrade -y && sudo apt-get autoremove -y'
 alias uvim='neovim +PackUpdate +qall ; neovim +CocInstall +qall';
+alias vim='nvim';
+alias vi='nvim';
+alias v='nvim';
+
 # audio restart (from Ubuntu podcast)
 alias restart-audio='systemctl --user restart pulseaudio'
 # bad way to restart
@@ -44,6 +48,7 @@ alias tp=trash-put
 alias rm=trash-put
 
 # Like cat, but nicer
+# alias cat='bat --style=plain'
 alias cat='batcat --style=plain'
 
 # Like ls, but nicer

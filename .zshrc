@@ -31,13 +31,21 @@ bindkey -e
 # # vi mode
 # bindkey -v
 # export KEYTIMEOUT=1
+#
+#
+
+# --------------------------------------------------------------------------------
+# COMPLETION
+# --------------------------------------------------------------------------------
+
 
 # Use modern completion system
+CASE_SENSITIVE="false"
+# setopt MENU_COMPLETE
+setopt no_list_ambiguous
 autoload -Uz compinit
-autoload -U compinit
-zstyle ':completion:*' menu select
+# autoload -U compinit
 zmodload zsh/complist
-compinit
 _comp_options+=(globdots)		# Include hidden files.
 compinit
 
@@ -45,13 +53,13 @@ zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select=2
+# zstyle ':completion:*' menu select=2
+zstyle ':completion:*' menu yes select=2
 eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
 zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
-zstyle ':completion:*' menu select=long
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*' use-compctl false
 zstyle ':completion:*' verbose true
@@ -59,9 +67,14 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+# use the vi navigation keys in menu completion
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
 
 # Load aliases and shortcuts if existent.
-[ -f "$HOME/.config/zsh/zsh_functions" ] && source "$HOME/.config/shortcutrc"
+[ -f "$HOME/.config/zsh/zsh_functions" ] && source "$HOME/.config/zsh/zsh_functions"
 [ -f "$HOME/.config/shell/aliases" ] && source "$HOME/.config/shell/aliases"
 
 
@@ -90,7 +103,7 @@ zinit light-mode for \
 
 
 # Two regular plugins loaded without investigating.
-zinit light zsh-users/zsh-autosuggestions
+# zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma/fast-syntax-highlighting
 
 # Plugin history-search-multi-word loaded with investigating.
